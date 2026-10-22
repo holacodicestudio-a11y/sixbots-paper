@@ -30,6 +30,12 @@ function renderChart() {
 }
 
 function num(id) { return Number($(id).value); }
+function inputError(message) {
+  const error = new Error(message);
+  error.inputValidation = true;
+  return error;
+}
+
 function readInputs() {
   const required = [
     ['price', 'precio observado'], ['observed-at', 'hora de consulta'],
@@ -39,27 +45,27 @@ function readInputs() {
     ['stop-price', 'stop'], ['target-price', 'objetivo'], ['invalidation', 'condición de invalidación'],
   ];
   const empty = required.filter(([id]) => !$(id).value.trim());
-  if (empty.length) throw new Error(`Completa estos campos antes de gastar llamadas de API: ${empty.map(([, label]) => label).join(', ')}.`);
+  if (empty.length) throw inputError(`Completa estos campos antes de gastar llamadas de API: ${empty.map(([, label]) => label).join(', ')}.`);
   const links = $('news').value.match(/https?:\/\/\S+/g) || [];
-  if (links.length < 2) throw new Error('Agrega al menos dos URL de noticias recientes para ORION.');
+  if (links.length < 2) throw inputError('Agrega al menos dos URL de noticias recientes para ORION.');
   const positive = ['price','balance','max-position','position-size','entry-price','stop-price','target-price'];
-  if (positive.some((id) => !Number.isFinite(num(id)) || num(id) <= 0)) throw new Error('Los precios, saldo y tamaños deben ser números mayores que cero.');
+  if (positive.some((id) => !Number.isFinite(num(id)) || num(id) <= 0)) throw inputError('Los precios, saldo y tamaños deben ser números mayores que cero.');
   const direction = $('direction').value;
   const entry = num('entry-price'), stop = num('stop-price'), target = num('target-price');
   if (direction === 'LONG' ? !(stop < entry && entry < target) : !(target < entry && entry < stop)) {
-    throw new Error(direction === 'LONG' ? 'Para LONG, el stop debe quedar debajo de la entrada y el objetivo arriba.' : 'Para SHORT, el objetivo debe quedar debajo de la entrada y el stop arriba.');
+    throw inputError(direction === 'LONG' ? 'Para LONG, el stop debe quedar debajo de la entrada y el objetivo arriba.' : 'Para SHORT, el objetivo debe quedar debajo de la entrada y el stop arriba.');
   }
-  if (num('position-size') > num('max-position')) throw new Error('El tamaño propuesto supera el máximo de posición definido. No se envió nada a OpenAI.');
-  if (!Number.isInteger(num('open-ideas')) || num('open-ideas') < 0) throw new Error('La cantidad de ideas abiertas debe ser un entero igual o mayor que cero.');
-  if (num('open-ideas') >= 1) throw new Error('El límite es una idea abierta y ya hay una en curso. No se envió nada a OpenAI.');
+  if (num('position-size') > num('max-position')) throw inputError('El tamaño propuesto supera el máximo de posición definido. No se envió nada a OpenAI.');
+  if (!Number.isInteger(num('open-ideas')) || num('open-ideas') < 0) throw inputError('La cantidad de ideas abiertas debe ser un entero igual o mayor que cero.');
+  if (num('open-ideas') >= 1) throw inputError('El límite es una idea abierta y ya hay una en curso. No se envió nada a OpenAI.');
   const riskFraction = direction === 'LONG' ? (entry - stop) / entry : (stop - entry) / entry;
   const rewardFraction = direction === 'LONG' ? (target - entry) / entry : (entry - target) / entry;
   const riskAmount = num('position-size') * riskFraction;
   const rewardAmount = num('position-size') * rewardFraction;
   const lossLimit = num('balance') * 0.0025;
   const rr = rewardAmount / riskAmount;
-  if (riskAmount > lossLimit) throw new Error(`La pérdida estimada (${riskAmount.toFixed(4)}) supera el límite de 0,25% (${lossLimit.toFixed(4)}). Ajusta la propuesta; no se envió nada a OpenAI.`);
-  if (rr < 2) throw new Error(`La relación recompensa/riesgo estimada es ${rr.toFixed(2)}:1; el mínimo es 2:1. Ajusta la propuesta; no se envió nada a OpenAI.`);
+  if (riskAmount > lossLimit) throw inputError(`La pérdida estimada (${riskAmount.toFixed(4)}) supera el límite de 0,25% (${lossLimit.toFixed(4)}). Ajusta la propuesta; no se envió nada a OpenAI.`);
+  if (rr < 2) throw inputError(`La relación recompensa/riesgo estimada es ${rr.toFixed(2)}:1; el mínimo es 2:1. Ajusta la propuesta; no se envió nada a OpenAI.`);
   return { direction, entry, stop, target, riskAmount, rewardAmount, lossLimit, rr };
 }
 
@@ -166,6 +172,7 @@ intervalInput.addEventListener('change', renderChart);
 
 $('start-analysis').addEventListener('click', async () => {
   const button = $('start-analysis');
+  $('analysis-feedback').textContent = '';
   try {
     const risk = readInputs();
     const image = await imagePayload();
@@ -190,6 +197,12 @@ $('start-analysis').addEventListener('click', async () => {
     }
     await consumeStream(response);
   } catch (error) {
+    $('analysis-feedback').textContent = error.message || 'No se pudo iniciar el análisis.';
+    if (error.inputValidation) {
+      $('session-label').textContent = 'FALTAN DATOS';
+      $('analysis-feedback').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
     $('session-panel').hidden = false;
     $('session-label').textContent = 'NO SE INICIÓ';
     $('session-panel .session-message p').textContent = error.message || 'No se pudo iniciar el análisis.';

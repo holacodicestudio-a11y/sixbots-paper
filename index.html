@@ -50,25 +50,26 @@
         <div class="panel context-panel">
           <div class="panel-head"><div><div class="eyebrow">02 / CONTEXTO</div><h2>Paquete de evidencia</h2></div><span class="step-number">A</span></div>
           <div class="field-grid">
-            <label class="field"><span>Precio observado <small>opcional</small></span><input id="price" placeholder="Ej. 231.45"></label>
-            <label class="field"><span>Hora de consulta <small>zona horaria</small></span><input id="observed-at" placeholder="Ej. 10:35 UTC−6"></label>
-            <label class="field field-wide"><span>Observaciones del gráfico <small>VEGA</small></span><textarea id="chart-notes" rows="3" placeholder="Tendencia visible, niveles, volumen o adjunta una captura al paquete…"></textarea></label>
+            <label class="field"><span>Precio observado <small>requerido</small></span><input id="price" type="number" min="0.00000001" step="any" placeholder="Ej. 231.45" required></label>
+            <label class="field"><span>Hora de consulta <small>requerido · zona horaria</small></span><input id="observed-at" placeholder="Ej. 10:35 UTC−6" required></label>
+            <label class="field field-wide"><span>Observaciones del gráfico <small>requerido · VEGA</small></span><textarea id="chart-notes" rows="3" placeholder="Tendencia visible, niveles, volumen o adjunta una captura al paquete…" required></textarea></label>
             <label class="field field-wide"><span>Captura del gráfico <small>opcional · recorta datos privados; se enviará a VEGA</small></span><input id="chart-image" type="file" accept="image/png,image/jpeg,image/webp" aria-label="Adjuntar captura de gráfico"></label>
-            <label class="field field-wide"><span>Noticias y fuentes <small>2+ URL + extractos para ORION</small></span><textarea id="news" rows="3" placeholder="Pega al menos 2 URLs recientes y los titulares/extractos con fecha. ORION no navega a los enlaces."></textarea></label>
+            <label class="field field-wide"><span>Noticias y fuentes <small>requerido · 2+ URL para ORION</small></span><textarea id="news" rows="3" placeholder="Pega al menos 2 URLs recientes y los titulares/extractos con fecha. ORION no navega a los enlaces." required></textarea></label>
             <label class="field field-wide"><span>Sentimiento / evidencia social <small>LUNA · opcional</small></span><textarea id="sentiment" rows="2" placeholder="Pega publicaciones o métricas; no basta con popularidad."></textarea></label>
-            <label class="field"><span>Saldo paper <small>requerido</small></span><input id="balance" type="number" min="0.01" step="any" placeholder="Ej. 10000"></label>
-            <label class="field"><span>Moneda del saldo</span><input id="currency" value="USD" maxlength="8" placeholder="USD, MXN…"></label>
-            <label class="field"><span>Ideas abiertas ahora <small>máximo 1</small></span><input id="open-ideas" type="number" min="0" step="1" placeholder="Confirma cuántas tienes"></label>
-            <label class="field"><span>Máximo de posición <small>moneda del saldo</small></span><input id="max-position" type="number" min="0.01" step="any" placeholder="Ej. 1000"></label>
-            <label class="field"><span>Tamaño propuesto <small>moneda del saldo</small></span><input id="position-size" type="number" min="0.01" step="any" placeholder="Ej. 500"></label>
+            <label class="field"><span>Saldo paper <small>requerido</small></span><input id="balance" type="number" min="0.01" step="any" placeholder="Ej. 10000" required></label>
+            <label class="field"><span>Moneda del saldo <small>requerido</small></span><input id="currency" value="USD" maxlength="8" placeholder="USD, MXN…" required></label>
+            <label class="field"><span>Ideas abiertas ahora <small>requerido · máximo 1</small></span><input id="open-ideas" type="number" min="0" step="1" placeholder="Confirma cuántas tienes" required></label>
+            <label class="field"><span>Máximo de posición <small>requerido · moneda del saldo</small></span><input id="max-position" type="number" min="0.01" step="any" placeholder="Ej. 1000" required></label>
+            <label class="field"><span>Tamaño propuesto <small>requerido · moneda del saldo</small></span><input id="position-size" type="number" min="0.01" step="any" placeholder="Ej. 500" required></label>
             <label class="field"><span>Dirección</span><select id="direction"><option value="LONG">LONG</option><option value="SHORT">SHORT</option></select></label>
-            <label class="field"><span>Entrada propuesta</span><input id="entry-price" type="number" min="0.00000001" step="any" placeholder="Precio"></label>
-            <label class="field"><span>Stop</span><input id="stop-price" type="number" min="0.00000001" step="any" placeholder="Precio"></label>
-            <label class="field"><span>Objetivo</span><input id="target-price" type="number" min="0.00000001" step="any" placeholder="Precio"></label>
-            <label class="field field-wide"><span>Condición que invalida la idea <small>requerido</small></span><input id="invalidation" placeholder="Ej. cierre de vela por debajo del nivel indicado"></label>
+            <label class="field"><span>Entrada propuesta <small>requerido</small></span><input id="entry-price" type="number" min="0.00000001" step="any" placeholder="Precio" required></label>
+            <label class="field"><span>Stop <small>requerido</small></span><input id="stop-price" type="number" min="0.00000001" step="any" placeholder="Precio" required></label>
+            <label class="field"><span>Objetivo <small>requerido</small></span><input id="target-price" type="number" min="0.00000001" step="any" placeholder="Precio" required></label>
+            <label class="field field-wide"><span>Condición que invalida la idea <small>requerido</small></span><input id="invalidation" placeholder="Ej. cierre de vela por debajo del nivel indicado" required></label>
           </div>
           <div class="risk-strip"><span class="risk-icon">⌁</span><span><b>Límites de esta sesión</b><small>1 idea abierta · pérdida máx. 0,25% · R/R mín. 2:1 · sin apalancamiento</small></span><span class="risk-lock">FIJOS</span></div>
           <button class="button button-primary" id="start-analysis"><span>Iniciar análisis</span><span class="arrow">↗</span></button>
+          <p id="analysis-feedback" class="analysis-feedback" role="status" aria-live="polite"></p>
           <p class="fine-print">Cada sesión puede generar hasta 6 llamadas pagadas a OpenAI API. Los datos y la captura se enviarán a OpenAI al pulsar. Revisa los límites de gasto de tu cuenta.</p>
         </div>
       </aside>
