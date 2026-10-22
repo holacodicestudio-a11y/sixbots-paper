@@ -124,10 +124,10 @@ async function consumeStream(response) {
       $('agent-results').append(note);
     } else if (item.type === 'error') {
       $('session-label').textContent = 'ANÁLISIS DETENIDO';
-      $('session-panel .session-message p').textContent = item.message;
+      document.querySelector('#session-panel .session-message p').textContent = item.message;
     } else if (item.type === 'done') {
       if ($('session-label').textContent.startsWith('ANALIZANDO:')) $('session-label').textContent = 'SESIÓN COMPLETADA';
-      $('session-panel .session-message p').textContent = 'Flujo terminado. Revisa los informes y toma tú la decisión final; cualquier operación debe ingresarse manualmente en la cuenta paper.';
+      document.querySelector('#session-panel .session-message p').textContent = 'Flujo terminado. Revisa los informes y toma tú la decisión final; cualquier operación debe ingresarse manualmente en la cuenta paper.';
     }
   }
   while (true) {
@@ -157,7 +157,7 @@ $('start-analysis').addEventListener('click', async () => {
     $('agent-results').replaceChildren();
     $('session-panel').hidden = false;
     $('session-label').textContent = 'PREPARANDO ANÁLISIS';
-    $('session-panel .session-message p').textContent = 'La información del paquete y la captura se enviarán a OpenAI API. Esta ejecución puede generar cargos. Ejecutando la cadena secuencial de agentes…';
+    document.querySelector('#session-panel .session-message p').textContent = 'La información del paquete y la captura se enviarán a OpenAI API. Esta ejecución puede generar cargos. Ejecutando la cadena secuencial de agentes…';
     document.querySelectorAll('.agent-card').forEach((card) => setAgent(card.dataset.agent, card.dataset.agent === 'titan' ? 'VETO ACTIVO · EN ESPERA' : 'EN ESPERA'));
     button.disabled = true;
     button.querySelector('span:first-child').textContent = 'Analizando…';
@@ -180,7 +180,7 @@ $('start-analysis').addEventListener('click', async () => {
     }
     $('session-panel').hidden = false;
     $('session-label').textContent = 'NO SE INICIÓ';
-    $('session-panel .session-message p').textContent = error.message || 'No se pudo iniciar el análisis.';
+    document.querySelector('#session-panel .session-message p').textContent = error.message || 'No se pudo iniciar el análisis.';
     $('session-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
   } finally {
     button.disabled = false;
