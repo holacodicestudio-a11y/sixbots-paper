@@ -43,29 +43,20 @@
           </div>
         </div>
         <div class="chart-wrap" id="chart-wrap"><div class="chart-placeholder"><span class="loader"></span><span>Cargando gráfico</span></div></div>
-        <div class="chart-foot"><span>Fuente: TradingView</span><span>Confirma ticker, hora y timeframe antes del análisis.</span></div>
+        <div class="chart-foot"><span>Fuente: TradingView</span><span>La captura se adjunta aparte para que VEGA la pueda leer.</span></div>
       </div>
 
       <aside class="side-column">
         <div class="panel context-panel">
           <div class="panel-head"><div><div class="eyebrow">02 / CONTEXTO</div><h2>Paquete de evidencia</h2></div><span class="step-number">A</span></div>
           <div class="field-grid">
-            <label class="field"><span>Precio observado <small>requerido</small></span><input id="price" type="number" min="0.00000001" step="any" placeholder="Ej. 231.45" required></label>
-            <label class="field"><span>Hora de consulta <small>requerido · zona horaria</small></span><input id="observed-at" placeholder="Ej. 10:35 UTC−6" required></label>
-            <label class="field field-wide"><span>Observaciones del gráfico <small>requerido · VEGA</small></span><textarea id="chart-notes" rows="3" placeholder="Tendencia visible, niveles, volumen o adjunta una captura al paquete…" required></textarea></label>
-            <label class="field field-wide"><span>Captura del gráfico <small>opcional · recorta datos privados; se enviará a VEGA</small></span><input id="chart-image" type="file" accept="image/png,image/jpeg,image/webp" aria-label="Adjuntar captura de gráfico"></label>
-            <label class="field field-wide"><span>Noticias y fuentes <small>requerido · 2+ URL para ORION</small></span><textarea id="news" rows="3" placeholder="Pega al menos 2 URLs recientes y los titulares/extractos con fecha. ORION no navega a los enlaces." required></textarea></label>
-            <label class="field field-wide"><span>Sentimiento / evidencia social <small>LUNA · opcional</small></span><textarea id="sentiment" rows="2" placeholder="Pega publicaciones o métricas; no basta con popularidad."></textarea></label>
-            <label class="field"><span>Saldo paper <small>requerido</small></span><input id="balance" type="number" min="0.01" step="any" placeholder="Ej. 10000" required></label>
-            <label class="field"><span>Moneda del saldo <small>requerido</small></span><input id="currency" value="USD" maxlength="8" placeholder="USD, MXN…" required></label>
-            <label class="field"><span>Ideas abiertas ahora <small>requerido · máximo 1</small></span><input id="open-ideas" type="number" min="0" step="1" placeholder="Confirma cuántas tienes" required></label>
-            <label class="field"><span>Máximo de posición <small>requerido · moneda del saldo</small></span><input id="max-position" type="number" min="0.01" step="any" placeholder="Ej. 1000" required></label>
-            <label class="field"><span>Tamaño propuesto <small>requerido · moneda del saldo</small></span><input id="position-size" type="number" min="0.01" step="any" placeholder="Ej. 500" required></label>
-            <label class="field"><span>Dirección</span><select id="direction"><option value="LONG">LONG</option><option value="SHORT">SHORT</option></select></label>
-            <label class="field"><span>Entrada propuesta <small>requerido</small></span><input id="entry-price" type="number" min="0.00000001" step="any" placeholder="Precio" required></label>
-            <label class="field"><span>Stop <small>requerido</small></span><input id="stop-price" type="number" min="0.00000001" step="any" placeholder="Precio" required></label>
-            <label class="field"><span>Objetivo <small>requerido</small></span><input id="target-price" type="number" min="0.00000001" step="any" placeholder="Precio" required></label>
-            <label class="field field-wide"><span>Condición que invalida la idea <small>requerido</small></span><input id="invalidation" placeholder="Ej. cierre de vela por debajo del nivel indicado" required></label>
+            <label class="field field-wide"><span>Captura reciente del gráfico <small>requerida para VEGA</small></span><input id="chart-image" type="file" accept="image/png,image/jpeg,image/webp" aria-label="Adjuntar captura de gráfico" required></label>
+            <label class="field field-wide"><span>Notas opcionales <small>solo contexto adicional</small></span><textarea id="chart-notes" rows="2" placeholder="Por ejemplo: zona que quieres que revisen o evento que observaste…"></textarea></label>
+            <label class="field field-wide"><span>Noticias / fuentes <small>opcionales · ORION no abre enlaces</small></span><textarea id="news" rows="2" placeholder="Pega titulares, extractos y fechas si quieres que ORION los contraste."></textarea></label>
+            <label class="field field-wide"><span>Sentimiento / evidencia social <small>LUNA · opcional</small></span><textarea id="sentiment" rows="2" placeholder="Publicaciones o métricas, si las tienes."></textarea></label>
+            <label class="field"><span>Saldo paper <small>requerido</small></span><input id="balance" type="number" min="0.01" step="any" placeholder="Ej. 30" required></label>
+            <label class="field"><span>Moneda del saldo <small>requerida</small></span><input id="currency" value="USDT" maxlength="8" placeholder="USDT, USD, MXN…" required></label>
+            <label class="field"><span>Ideas abiertas ahora <small>requerido · máximo 1</small></span><input id="open-ideas" type="number" min="0" step="1" placeholder="0" required></label>
           </div>
           <div class="risk-strip"><span class="risk-icon">⌁</span><span><b>Límites de esta sesión</b><small>1 idea abierta · pérdida máx. 0,25% · R/R mín. 2:1 · sin apalancamiento</small></span><span class="risk-lock">FIJOS</span></div>
           <button class="button button-primary" id="start-analysis"><span>Iniciar análisis</span><span class="arrow">↗</span></button>
