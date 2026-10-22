@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1220">
+  <title>SixBots — Mesa paper</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="auth-pending">
+  <section id="auth-overlay" class="auth-overlay" hidden aria-labelledby="auth-title">
+    <form id="login-form" class="auth-card">
+      <div class="brand-mark">6</div>
+      <div class="eyebrow">SESIÓN PRIVADA</div>
+      <h1 id="auth-title">Entrar a SixBots</h1>
+      <p>Escribe la contraseña de acceso configurada para esta app.</p>
+      <label class="field"><span>Contraseña</span><input id="app-password" type="password" autocomplete="current-password" required></label>
+      <p id="login-error" class="auth-error" aria-live="polite"></p>
+      <button id="login-button" class="button button-primary" type="submit">Iniciar sesión</button>
+    </form>
+  </section>
+  <header class="topbar">
+    <a class="brand" href="#"><span class="brand-mark">6</span><span>sixbots<span class="brand-muted"> / paper desk</span></span></a>
+    <div class="top-right"><span class="env-pill"><i></i> SIMULACIÓN</span><span class="human">CONTROL HUMANO ACTIVO</span><button id="logout-button" class="button button-quiet" type="button" hidden>Cerrar sesión</button></div>
+  </header>
+
+  <main>
+    <section class="intro">
+      <div><div class="eyebrow">MESA DE ANÁLISIS · EJERCICIO 01</div><h1>Una gráfica.<br><span>Seis perspectivas.</span></h1><p>Selecciona un mercado, reúne la evidencia y pon a tus agentes a trabajar. La decisión final siempre es tuya.</p></div>
+      <div class="session-chip"><span class="pulse"></span><span id="session-label">ESPERANDO DATOS</span></div>
+    </section>
+
+    <section class="workspace">
+      <div class="chart-panel panel">
+        <div class="panel-head chart-head">
+          <div><div class="eyebrow">01 / MERCADO</div><h2>Gráfico en vivo</h2></div>
+          <div class="chart-controls">
+            <label class="sr-only" for="symbol">Ticker en formato TradingView</label>
+            <input id="symbol" value="NASDAQ:AAPL" spellcheck="false" aria-label="Ticker o símbolo TradingView">
+            <label class="sr-only" for="interval">Intervalo</label>
+            <select id="interval" aria-label="Intervalo del gráfico"><option value="1">1 min</option><option value="5">5 min</option><option value="15">15 min</option><option value="60">1 h</option><option value="240">4 h</option><option value="D" selected>1 día</option><option value="W">1 sem</option></select>
+            <button class="button button-quiet" id="load-chart">Cargar</button>
+          </div>
+        </div>
+        <div class="chart-wrap" id="chart-wrap"><div class="chart-placeholder"><span class="loader"></span><span>Cargando gráfico</span></div></div>
+        <div class="chart-foot"><span>Fuente: TradingView</span><span>Confirma ticker, hora y timeframe antes del análisis.</span></div>
+      </div>
+
+      <aside class="side-column">
+        <div class="panel context-panel">
+          <div class="panel-head"><div><div class="eyebrow">02 / CONTEXTO</div><h2>Paquete de evidencia</h2></div><span class="step-number">A</span></div>
+          <div class="field-grid">
+            <label class="field"><span>Precio observado <small>opcional</small></span><input id="price" placeholder="Ej. 231.45"></label>
+            <label class="field"><span>Hora de consulta <small>zona horaria</small></span><input id="observed-at" placeholder="Ej. 10:35 UTC−6"></label>
+            <label class="field field-wide"><span>Observaciones del gráfico <small>VEGA</small></span><textarea id="chart-notes" rows="3" placeholder="Tendencia visible, niveles, volumen o adjunta una captura al paquete…"></textarea></label>
+            <label class="field field-wide"><span>Captura del gráfico <small>opcional · recorta datos privados; se enviará a VEGA</small></span><input id="chart-image" type="file" accept="image/png,image/jpeg,image/webp" aria-label="Adjuntar captura de gráfico"></label>
+            <label class="field field-wide"><span>Noticias y fuentes <small>2+ URL + extractos para ORION</small></span><textarea id="news" rows="3" placeholder="Pega al menos 2 URLs recientes y los titulares/extractos con fecha. ORION no navega a los enlaces."></textarea></label>
+            <label class="field field-wide"><span>Sentimiento / evidencia social <small>LUNA · opcional</small></span><textarea id="sentiment" rows="2" placeholder="Pega publicaciones o métricas; no basta con popularidad."></textarea></label>
+            <label class="field"><span>Saldo paper <small>requerido</small></span><input id="balance" type="number" min="0.01" step="any" placeholder="Ej. 10000"></label>
+            <label class="field"><span>Moneda del saldo</span><input id="currency" value="USD" maxlength="8" placeholder="USD, MXN…"></label>
+            <label class="field"><span>Ideas abiertas ahora <small>máximo 1</small></span><input id="open-ideas" type="number" min="0" step="1" placeholder="Confirma cuántas tienes"></label>
+            <label class="field"><span>Máximo de posición <small>moneda del saldo</small></span><input id="max-position" type="number" min="0.01" step="any" placeholder="Ej. 1000"></label>
+            <label class="field"><span>Tamaño propuesto <small>moneda del saldo</small></span><input id="position-size" type="number" min="0.01" step="any" placeholder="Ej. 500"></label>
+            <label class="field"><span>Dirección</span><select id="direction"><option value="LONG">LONG</option><option value="SHORT">SHORT</option></select></label>
+            <label class="field"><span>Entrada propuesta</span><input id="entry-price" type="number" min="0.00000001" step="any" placeholder="Precio"></label>
+            <label class="field"><span>Stop</span><input id="stop-price" type="number" min="0.00000001" step="any" placeholder="Precio"></label>
+            <label class="field"><span>Objetivo</span><input id="target-price" type="number" min="0.00000001" step="any" placeholder="Precio"></label>
+            <label class="field field-wide"><span>Condición que invalida la idea <small>requerido</small></span><input id="invalidation" placeholder="Ej. cierre de vela por debajo del nivel indicado"></label>
+          </div>
+          <div class="risk-strip"><span class="risk-icon">⌁</span><span><b>Límites de esta sesión</b><small>1 idea abierta · pérdida máx. 0,25% · R/R mín. 2:1 · sin apalancamiento</small></span><span class="risk-lock">FIJOS</span></div>
+          <button class="button button-primary" id="start-analysis"><span>Iniciar análisis</span><span class="arrow">↗</span></button>
+          <p class="fine-print">Cada sesión puede generar hasta 6 llamadas pagadas a OpenAI API. Los datos y la captura se enviarán a OpenAI al pulsar. Revisa los límites de gasto de tu cuenta.</p>
+        </div>
+      </aside>
+    </section>
+
+    <section class="agents-section">
+      <div class="section-heading"><div><div class="eyebrow">03 / EQUIPO DE SEIS AGENTES</div><h2>La mesa de análisis</h2></div><span class="flow-note">Evidencia común <b>→</b> revisión cruzada <b>→</b> decisión paper</span></div>
+      <div class="agent-grid">
+        <article class="agent-card" data-agent="atlas"><div class="agent-top"><span class="agent-avatar a-blue">A</span><span class="agent-state">EN ESPERA</span></div><h3>ATLAS</h3><p>Explora el mercado y prioriza oportunidades con evidencia.</p><span class="agent-output">WATCHLIST</span></article>
+        <article class="agent-card" data-agent="vega"><div class="agent-top"><span class="agent-avatar a-violet">V</span><span class="agent-state">EN ESPERA</span></div><h3>VEGA</h3><p>Lee tendencia, niveles y condiciones de invalidez.</p><span class="agent-output">LECTURA TÉCNICA</span></article>
+        <article class="agent-card" data-agent="orion"><div class="agent-top"><span class="agent-avatar a-amber">O</span><span class="agent-state">EN ESPERA</span></div><h3>ORION</h3><p>Ordena catalizadores, fuentes y datos contradictorios.</p><span class="agent-output">VERIFICACIÓN</span></article>
+        <article class="agent-card" data-agent="luna"><div class="agent-top"><span class="agent-avatar a-pink">L</span><span class="agent-state">EN ESPERA</span></div><h3>LUNA</h3><p>Evalúa sentimiento, hype y sesgos de la muestra.</p><span class="agent-output">SENTIMIENTO</span></article>
+        <article class="agent-card titan-card" data-agent="titan"><div class="agent-top"><span class="agent-avatar a-green">T</span><span class="agent-state">VETO ACTIVO</span></div><h3>TITAN <span class="veto-label">VETO</span></h3><p>Comprueba límites de riesgo. Puede detener la idea.</p><span class="agent-output">CONTROL DE RIESGO</span></article>
+        <article class="agent-card nova-card" data-agent="nova"><div class="agent-top"><span class="agent-avatar a-white">N</span><span class="agent-state">EN ESPERA</span></div><h3>NOVA</h3><p>Integra desacuerdos y emite TRADE, WAIT o REJECT.</p><span class="agent-output">DECISIÓN FINAL PAPER</span></article>
+      </div>
+    </section>
+
+    <section id="session-panel" class="session-panel panel" hidden>
+      <div class="panel-head"><div><div class="eyebrow">EXPEDIENTE PREPARADO</div><h2 id="session-title">Sesión paper</h2></div><div class="chart-controls"><button class="button button-quiet" id="copy-pack">Copiar paquete</button><button class="button button-quiet" id="download-report">Descargar informe</button></div></div>
+      <div class="session-message"><span class="session-check">✓</span><div><b>La sesión está lista para análisis.</b><p>Este prototipo aún no llama a modelos. No simularé respuestas: conecta un motor de IA para que los seis agentes trabajen automáticamente.</p></div></div>
+      <pre id="pack-preview" class="pack-preview"></pre>
+      <div id="agent-results" class="agent-results"></div>
+      <div class="pending-list"><b>Qué falta para automatizar la mesa</b><span>Motor de IA seleccionado</span><span>Backend seguro para mantener la clave fuera del navegador</span><span>Flujo secuencial: cuatro analistas → TITAN → NOVA</span></div>
+    </section>
+
+    <footer><span>SixBots · mesa de análisis para simulación</span><span>No ejecuta órdenes · No promete rendimientos</span></footer>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

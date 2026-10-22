@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: sixbots-paper
+    runtime: docker
+    plan: free
+    healthCheckPath: /api/health
+    autoDeployTrigger: commit
+    envVars:
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: APP_ACCESS_PASSWORD
+        sync: false
+      - key: APP_SESSION_SECRET
+        generateValue: true
+      - key: OPENAI_MODEL
+        value: gpt-6-astra
