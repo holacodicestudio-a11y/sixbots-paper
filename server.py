@@ -223,7 +223,9 @@ class Handler(SimpleHTTPRequestHandler):
         super().do_GET()
 
     def _event(self, value: dict):
-        data = json.dumps(value, ensure_ascii=False).encode("utf-8")
+        # The response body is newline-delimited JSON inside HTTP chunks. Keep
+        # the application-level delimiter separate from the HTTP chunk framing.
+        data = json.dumps(value, ensure_ascii=False).encode("utf-8") + b"\n"
         self.wfile.write(f"{len(data):X}\r\n".encode("ascii") + data + b"\r\n")
         self.wfile.flush()
 
